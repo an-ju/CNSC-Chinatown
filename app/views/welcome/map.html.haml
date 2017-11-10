@@ -11,10 +11,28 @@
   %body{:style => "background-color:lightsalmon;"}
     %div{:style => "width:800px; margin: 0 auto 0 auto;"}
       #map{:style => "width: 100vh; height: 50vh;"}
-    :javascript
-      handler = Gmaps.build('Google');
-      handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-        markers = handler.addMarkers(#{raw @hash.to_json});
-        handler.bounds.extendWith(markers);
-        handler.fitMapToBounds();
-      });
+      :javascript
+        handler = Gmaps.build('Google');
+        handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+          markers = handler.addMarkers(#{raw @hash.to_json});
+          handler.bounds.extendWith(markers);
+          handler.fitMapToBounds();
+          handler.center
+          google.maps.event.trigger(map, "resize");
+          // load();
+        });
+        
+        (function load()
+          {
+            if( window.localStorage )
+            {
+              if( !localStorage.getItem( 'firstLoad' ) )
+              {
+                localStorage[ 'firstLoad' ] = true;
+                window.location.reload();
+              }  
+              else
+                localStorage.removeItem( 'firstLoad' );
+            }
+          })();
+        
