@@ -16,7 +16,7 @@ class PointsController < ApplicationController
       @selected_categories = Hash[@all_categories.map {|category| [category, category]}]
     end
     
-    if params[:latitude]["latitude"] != "" and params[:longitude]["longitude"] != "" and params[:latitude] != nil 
+    if params[:latitude] != nil and params[:latitude]["latitude"] != "" and params[:longitude]["longitude"] != ""
       @points = Point.where(category: @selected_categories.keys).nearbyPoints(params[:latitude], params[:longitude])
     else
       @points = Point.where(category: @selected_categories.keys)
